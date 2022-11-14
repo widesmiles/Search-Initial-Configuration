@@ -203,7 +203,7 @@ session.viewports['Viewport: 1'].assemblyDisplay.setValues(step='Initial')
 mdb.models['Model-1'].boundaryConditions['BC-1'].move('Step-1', 'Initial')
 a = mdb.models['Model-1'].rootAssembly
 region = a.sets['asymnode']
-mdb.models['Model-1'].ZsymmBC(name='BC-2', createStepName='Initial', 
+mdb.models['Model-1'].EncastreBC(name='BC-2', createStepName='Initial', 
     region=region, localCsys=None)
 session.viewports['Viewport: 1'].view.setValues(nearPlane=73.7465, 
     farPlane=160.303, width=224.404, height=117.254, cameraPosition=(98.969, 
