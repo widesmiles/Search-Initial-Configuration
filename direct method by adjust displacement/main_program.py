@@ -12,10 +12,10 @@ import time
 import subprocess
 from IdentifyInitialConfiguration import *
 
-main_folder = 'I:\model debug\SearchInitialConfiguration'
+main_folder = 'E:\model debug\SearchInitialConfiguration'
 
 # node_num = 4283
-max_loop_times = 100
+max_loop_times = 1000
 loop_time = 0
 
 # read initial disp from step-1-0
@@ -54,11 +54,14 @@ initial_X0 = EffectiveNodes(initial_Nodes, dis_data[:,0])
 X0 = np.array(initial_X0)[:,1:]
 
 relative_tol = 0.001
-absolute_tol = 1e-3
+absolute_tol = 1e-5
 implement_dis = np.zeros((node_num,4))
 implement_dis[:,0] = dis_data[:,0]
-Xn = X0 + dis_data[:,1:]
-implement_dis[:,1:] = X0 - Xn
+implement_dis[:,1:] = -dis_data[:,1:]
+last_dis = np.zeros((node_num,4))
+last_dis[:,0] = dis_data[:,0]
+last_dis[:,1:] = -dis_data[:,1:]
+penalty = 1.00
         
 while  loop_time<1 or disp_magnitude(Xn, X0).max()>absolute_tol:
 
@@ -107,6 +110,7 @@ while  loop_time<1 or disp_magnitude(Xn, X0).max()>absolute_tol:
     Xn = last_effective_Nodes[:,1:] + dis_data[:,1:]
     implement_dis = np.zeros((node_num,4))
     implement_dis[:,0] = dis_data[:,0]
-    implement_dis[:,1:] = X0 - Xn
+    # implement_dis[:,1:] = -(Xn - last_effective_Nodes[:,1:] - (Xn - X0))*penalty
+    implement_dis[:,1:] = -(X0-(last_effective_Nodes[:,1:]-(Xn-X0)))*penalty
     loop_time = loop_time + 1
-    print('The max error if displacement field is %d. '%disp_magnitude(Xn, X0).max())
+    print('The max error if displacement field is %8.10f. '%disp_magnitude(Xn, X0).max())

@@ -30,9 +30,30 @@ def WriteNewDisp(subname, dislist):
         new_str = new_str + '      select case (NODE)\n'
         for i in range(dislist.shape[0]):
             new_str = new_str + '      case (' + str(int(Node[i])) + ')\n'
-            new_str = new_str + '      U(1) = TIME(1)*' + str('%8.10f' % U1[i]) + 'd0\n'
-            new_str = new_str + '      U(2) = TIME(1)*' + str('%8.10f' % U2[i]) + 'd0\n'
-            new_str = new_str + '      U(3) = TIME(1)*' + str('%8.10f' % U3[i]) + 'd0\n'
+            if U1[i]>=0:
+                new_str = new_str + '      IF (JDOF.EQ.1) THEN\n'
+                new_str = new_str + '      U(1) = TIME(1)*' + str('%8.10f' % U1[i]) + 'd0\n'
+                new_str = new_str + '      ENDIF\n'
+            else:
+                new_str = new_str + '      IF (JDOF.EQ.1) THEN\n'
+                new_str = new_str + '      U(1) = -TIME(1)*' + str('%8.10f' % abs(U1[i])) + 'd0\n'
+                new_str = new_str + '      ENDIF\n'
+            if U2[i]>=0:
+                new_str = new_str + '      IF (JDOF.EQ.2) THEN\n'
+                new_str = new_str + '      U(1) = TIME(1)*' + str('%8.10f' % U2[i]) + 'd0\n'
+                new_str = new_str + '      ENDIF\n'
+            else:
+                new_str = new_str + '      IF (JDOF.EQ.2) THEN\n'
+                new_str = new_str + '      U(1) = -TIME(1)*' + str('%8.10f' % abs(U2[i])) + 'd0\n'
+                new_str = new_str + '      ENDIF\n'
+            if U3[i]>=0:
+                new_str = new_str + '      IF (JDOF.EQ.3) THEN\n'
+                new_str = new_str + '      U(1) = TIME(1)*' + str('%8.10f' % U3[i]) + 'd0\n'
+                new_str = new_str + '      ENDIF\n'
+            else:
+                new_str = new_str + '      IF (JDOF.EQ.3) THEN\n'
+                new_str = new_str + '      U(1) = -TIME(1)*' + str('%8.10f' % abs(U3[i])) + 'd0\n'
+                new_str = new_str + '      ENDIF\n'
         new_str = new_str + '      end select\n'
         new_str = new_str + '      return\n'
         new_str = new_str + '      end'
@@ -155,3 +176,9 @@ def EffectiveNodes(all_Node_info,target_nodeset):
             effective_nodes_info[count,:] = node_info
             count = count + 1
     return effective_nodes_info
+
+# def JudgeIncNum(sta_filename):
+#     with open(sta_filename) as f:
+#         lines = f.realines()
+#         for line in lines:
+#             if 'THE ANALYSIS HAS COMPLETED SUCCESSFULLY' in line:
