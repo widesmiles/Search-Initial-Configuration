@@ -5,7 +5,7 @@ Bio-tissue is often in a certain state of pre-stress in the human body, for exam
 In this project, we use the direct method to obtain the initial configuration. Assume that we have a target configuration $A$ and a known load $F$. Then we start a simple iterative process:
 1. start with our only known target configuration $A$ as initial configuration $A_0$
 2.  apply load $F$ to $A_0$, and get the result configuration $A^{*}$
-3.  calculate the difference between $A^{*}$ and the target configuraiton $A$, to get the difference field $U=A^{*} -A$
+3.  calculate the difference between $A*$ and the target configuraiton $A$, to get the difference field $U=A* -A$
 4.  Check if the difference field $U$ is small enough, if yes, then stop the iteration and $A_0$ is the result of  initial configuration; if not, then update the initial configuration $A_0$ by $A_0 = A_0 - U$ and go back to step 2.
 
 In this project, we use a internal pressure loaded cylinder as an example of the direct method. You can simply replace the example job file to your own one, the code still works. You should refer to different folders regarding to the dimension of your model, 2D or 3D.
