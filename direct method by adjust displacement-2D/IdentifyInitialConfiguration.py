@@ -17,18 +17,18 @@ def WriteNewDisp(subname, dislist):
     Node = dislist[:,0]
     U1 = dislist[:,1]
     U2 = dislist[:,2]
-    U3 = dislist[:,3]
+    # U3 = dislist[:,3] 
     
     with open(subname,'w') as new_sub:
         new_str = ''
         new_str = new_str + '      SUBROUTINE DISP(U,KSTEP,KINC,TIME,NODE,NOEL,JDOF,COORDS)\n'
         new_str = new_str + "      INCLUDE 'ABA_PARAM.INC'\n"
-        new_str = new_str + '      DIMENSION U(3),TIME(2),COORDS(3)\n'
+        new_str = new_str + '      DIMENSION U(3),TIME(2),COORDS(2)\n'  # COORD(2) for 2D models
         new_str = new_str + '      U(1) = 0.d0\n'
         new_str = new_str + '      U(2) = 0.d0\n'
         new_str = new_str + '      U(3) = 0.d0\n'
         new_str = new_str + '      select case (NODE)\n'
-        for i in range(dislist.shape[0]):
+        for i in range(dislist.shape[0]):  # when U is negative, str() will add a minus sign, so to switch case
             new_str = new_str + '      case (' + str(int(Node[i])) + ')\n'
             if U1[i]>=0:
                 new_str = new_str + '      IF (JDOF.EQ.1) THEN\n'
@@ -46,14 +46,14 @@ def WriteNewDisp(subname, dislist):
                 new_str = new_str + '      IF (JDOF.EQ.2) THEN\n'
                 new_str = new_str + '      U(1) = -TIME(1)*' + str('%8.10f' % abs(U2[i])) + 'd0\n'
                 new_str = new_str + '      ENDIF\n'
-            if U3[i]>=0:
-                new_str = new_str + '      IF (JDOF.EQ.3) THEN\n'
-                new_str = new_str + '      U(1) = TIME(1)*' + str('%8.10f' % U3[i]) + 'd0\n'
-                new_str = new_str + '      ENDIF\n'
-            else:
-                new_str = new_str + '      IF (JDOF.EQ.3) THEN\n'
-                new_str = new_str + '      U(1) = -TIME(1)*' + str('%8.10f' % abs(U3[i])) + 'd0\n'
-                new_str = new_str + '      ENDIF\n'
+            # if U3[i]>=0:
+            #     new_str = new_str + '      IF (JDOF.EQ.3) THEN\n'
+            #     new_str = new_str + '      U(1) = TIME(1)*' + str('%8.10f' % U3[i]) + 'd0\n'
+            #     new_str = new_str + '      ENDIF\n'
+            # else:
+            #     new_str = new_str + '      IF (JDOF.EQ.3) THEN\n'
+            #     new_str = new_str + '      U(1) = -TIME(1)*' + str('%8.10f' % abs(U3[i])) + 'd0\n'
+            #     new_str = new_str + '      ENDIF\n'
         new_str = new_str + '      end select\n'
         new_str = new_str + '      return\n'
         new_str = new_str + '      end'
@@ -63,7 +63,7 @@ def WriteNewDisp(subname, dislist):
 def disp_magnitude(X1,X2):
     X_m = np.zeros((X1.shape[0],1))
     for i in range(X1.shape[0]):
-        X_m[i] = math.sqrt((X1[i,0]-X2[i,0])**2.0+(X1[i,1]-X2[i,1])**2.0+(X1[i,2]-X2[i,2])**2)
+        X_m[i] = math.sqrt((X1[i,0]-X2[i,0])**2.0+(X1[i,1]-X2[i,1])**2.0)
     return X_m
 
 def dis_info(dat_name):
@@ -79,14 +79,13 @@ def dis_info(dat_name):
             count = count + 1
         node_num = node_output_end_line - node_output_start_line
         for i in range(node_num):
-            temp_line = lines[node_output_start_line+i].split(' ')
+            temp_line = lines[node_output_start_line+i].split()
             dis_line = []
-            for j in range(len(temp_line)-1):
-                if temp_line[j] != '':
-                    if j == 0:
-                        dis_line.append(int(temp_line[j]))
-                    if j > 0:
-                        dis_line.append(float(temp_line[j]))
+            for j in range(len(temp_line)):
+                if j == 0:
+                    dis_line.append(int(temp_line[j]))
+                if j > 0:
+                    dis_line.append(float(temp_line[j]))
             dis_list.append(dis_line)
             dis_data = np.array(dis_list)
     return dis_data, node_num
@@ -154,7 +153,7 @@ def ObtainNodeInfo(initial_inp_filename):
         start_count = 1
         end_count = 1
         for line in lines:
-            if '*Part, name=cylinder' in line and start_count==1 :
+            if '*Part, name=Part-1' in line and start_count==1 :
                 node_start_line = count + 2
                 start_count = 0
             if '*Element' in line and end_count==1:
@@ -164,12 +163,12 @@ def ObtainNodeInfo(initial_inp_filename):
         part_node_num = node_end_line - node_start_line
         for line in lines[node_start_line:node_end_line]:
             words = line.split(',')
-            Node_info.append([int(words[0]),float(words[1]),float(words[2]),float(words[3])])
+            Node_info.append([int(words[0]),float(words[1]),float(words[2])])
     initial_inp.close()
     return Node_info
 
 def EffectiveNodes(all_Node_info,target_nodeset):
-    effective_nodes_info = np.zeros((len(target_nodeset),4))
+    effective_nodes_info = np.zeros((len(target_nodeset),3))
     count = 0
     for node_info in all_Node_info:
         if node_info[0] in target_nodeset:
