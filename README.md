@@ -59,18 +59,18 @@ Here we introduce how to the needed files based on your job.
 	```python
 	session.openOdb(os.path.join(main_folder,Step2_name))
 	odb = session.odbs[Step2_name]
-```
+	```
 	- Change the job name as follows:
 	```python
 	mdb.Job(name=new_Step3_filename, model='Model-1', description='', type=ANALYSIS,
-    atTime=None, waitMinutes=0, waitHours=0, queue=None, memory=90,
-    memoryUnits=PERCENTAGE, getMemoryFromAnalysis=True,
-    explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF,
-    modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='',
-    scratch='', resultsFormat=ODB, numThreadsPerMpiProcess=1,
-    multiprocessingMode=DEFAULT, numCpus=8, numDomains=8, numGPUs=0)
+	    atTime=None, waitMinutes=0, waitHours=0, queue=None, memory=90,
+	    memoryUnits=PERCENTAGE, getMemoryFromAnalysis=True,
+	    explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF,
+	    modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='',
+	    scratch='', resultsFormat=ODB, numThreadsPerMpiProcess=1,
+	    multiprocessingMode=DEFAULT, numCpus=8, numDomains=8, numGPUs=0)
 	mdb.jobs[new_Step3_filename].writeInput(consistencyChecking=OFF)
-```
+	```
 	- At the end of the python file, add the following code:
 	```python
 	# flag for .py file completion
@@ -79,7 +79,7 @@ Here we introduce how to the needed files based on your job.
 	with open(step3_status_filename,'w') as step3_status_file:
 	    step3_status_file.writelines(str(step3_status))
 	step3_status_file.close()
-```
+	```
 
 These are all the files you need to prepare based on your own model. 
 
