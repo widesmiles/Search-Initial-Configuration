@@ -1,0 +1,16 @@
+.MathJax_Display, .MathJax_SVG_Display, .MathJax_HTML_Display {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: center;
+    margin: 1em 0;
+  }
+  
+  .MathJax_Display {
+    display: block !important;
+  }
+  
+  .MathJax_SVG_Display svg, .MathJax_HTML_Display span {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
