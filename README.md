@@ -1,13 +1,5 @@
 # How to prepare all necessary files and implement the modification procedure.
 
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-
 Bio-tissue is often in a certain state of pre-stress in the human body, for example, the cornea is under intraocular pressure, the blood vessel is under blood pressure and et al. So whatever method we use to measure the configuration of the tissue, we can not get the load-free configuration(or be called initial configuration), which is needed in abaqus modeling.
 
 In this project, we use the direct method to obtain the initial configuration. Assume that we have a target configuration $A$ and a known load $F$. Then we start a simple iterative process:
@@ -106,6 +98,3 @@ The figure above is an example of 2D model. The left and the right represent the
 ## Troubleshooting
 
 - When the main program encounters an error, before you fix the bugs and restart the program, remember to delete all the result files of abaqus in your working directory. If you don't do that, the powershell called by the main program would halt, because it would ask `Old job files exist. Overwrite? (y/n):` and you have no way to answer.
-
-</body>
-</html>
