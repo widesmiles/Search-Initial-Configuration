@@ -23,7 +23,7 @@ In this project, we use a internal pressure loaded cylinder as an example of the
 
 ## Prepare the input files
 
-Here we introduce how to the needed files based on your job.
+Here we introduce how to prepare the needed files based on your job.
 1. Prepare `Step-1.inp` 
 	- First, after you have complete your own abaqus job file, you need to select all the nodes that are not fixed(all nodes in the model except the nodes of the fixed boundary) and create a nodeset named `allnodes`.
 	- Then you can write the `.inp` file of your job, and save it as `Step-1.inp` in your abaqus working directory.
